@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
 import { db, eq } from "@/lib/db";
-import { inngest } from "@/inngest/client";
 import { validateWebhookSignature } from "@/lib/asaas";
 
 // ─── Webhook payload types ────────────────────────────────────────────────────

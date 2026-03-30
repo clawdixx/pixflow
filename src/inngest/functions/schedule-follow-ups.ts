@@ -42,7 +42,7 @@ export const scheduleFollowUps = inngest.createFunction(
 export const checkAndSendReminders = inngest.createFunction(
   { id: "check-and-send-reminders", retries: 3, concurrency: 2 },
   { event: "check/reminders" },
-  async ({ event, step }) => {
+  async ({ event: _event, step }) => {
     const now = new Date().toISOString();
 
     const pendingSchedules = await step.run("fetch-pending-schedules", async () => {

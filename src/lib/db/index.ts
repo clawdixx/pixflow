@@ -196,7 +196,8 @@ export const db = {
 
 // ─── Select Builder ──────────────────────────────────────────────────────────
 
-class SelectBuilder<T> {
+ 
+class SelectBuilder<_T> {
   private _db: Database.Database;
   private _cols: string[];
   private _table = "";
@@ -254,7 +255,7 @@ class SelectBuilder<T> {
 
 // ─── Insert Builder ──────────────────────────────────────────────────────────
 
-class InsertBuilder<T> {
+class InsertBuilder<_T> {
   private _db: Database.Database;
   private _table: string;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -301,11 +302,11 @@ class InsertBuilder<T> {
 
 // ─── Update Builder ──────────────────────────────────────────────────────────
 
-class UpdateBuilder<T> {
+class UpdateBuilder<_T> {
   private _db: Database.Database;
   private _table: string;
   private _whereSql = "";
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+   
   private _whereParams: unknown[] = [];
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   private _setData: Record<string, any> = {};
@@ -331,7 +332,7 @@ class UpdateBuilder<T> {
   returning(): { all: () => any[] } {
     const camelKeys = Object.keys(this._setData);
     const snakeKeys = camelKeys.map((k) => k.replace(/[A-Z]/g, (c) => `_${c.toLowerCase()}`));
-    const setClause = snakeKeys.map((k, i) => `${k} = ?`).join(", ");
+    const setClause = snakeKeys.map((k) => `${k} = ?`).join(", ");
     // Normalize booleans to 1/0 for SQLite
     const setValues = camelKeys.map((k) => {
       const v = this._setData[k];
@@ -349,11 +350,11 @@ class UpdateBuilder<T> {
 
 // ─── Delete Builder ──────────────────────────────────────────────────────────
 
-class DeleteBuilder<T> {
+class DeleteBuilder<_T> {
   private _db: Database.Database;
   private _table: string;
   private _whereSql = "";
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+   
   private _whereParams: unknown[] = [];
 
   constructor(db: Database.Database, table: string) {
