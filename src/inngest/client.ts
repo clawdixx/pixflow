@@ -19,9 +19,7 @@ export interface PaymentCreatedEvent {
 
 export interface CheckRemindersEvent {
   name: "check/reminders";
-  data: {
-    // triggerd by cron or manual
-  };
+  data: Record<string, never>;
 }
 
 export type AppEvents = PaymentCreatedEvent | CheckRemindersEvent;

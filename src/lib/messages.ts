@@ -62,7 +62,6 @@ Qualquer dúvida, me responde aqui! 😊`;
 
 /** Dia 7 — Tom mais direto, menciona Consequences */
 export function d7Message(ctx: MessageContext): string {
-  const freelancer = ctx.freelancerName ? `${ctx.freelancerName} aqui` : "Oi";
   return `Oi ${ctx.customerName}, tudo bem?
 
 Já se passaram **7 dias** desde o vencimento do pagamento de **${formatCurrency(ctx.amount)}**
@@ -81,7 +80,6 @@ Abraço,`;
 
 /** Dia 14 — Última chance, tom sério mas educado */
 export function d14Message(ctx: MessageContext): string {
-  const freelancer = ctx.freelancerName ? `${ctx.freelancerName} aqui` : "Oi";
   return `${ctx.customerName},
 
 Já se passaram **14 dias** do vencimento da sua obrigação de **${formatCurrency(ctx.amount)}**

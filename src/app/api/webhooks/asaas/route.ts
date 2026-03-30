@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { db, eq, toSnake } from "@/lib/db";
-import { inngest } from "@/inngest/client";
+import { db, eq } from "@/lib/db";
 import { validateWebhookSignature } from "@/lib/asaas";
 
 // ─── Webhook payload types ────────────────────────────────────────────────────
@@ -89,11 +88,12 @@ async function handlePaymentCreated(payload: AsaasWebhookPayload) {
       phone: "5511999999999",
       isActive: true,
     }]).returning().all();
+    if (!created) throw new Error("Falha ao criar cliente");
     customerId = created.id;
   }
 
   // Create payment record
-  const [newPayment] = db.insert("pixflow_payments").values([{
+  const paymentRows = db.insert("pixflow_payments").values([{
     userId: DEMO_USER_ID,
     customerId,
     asaasPaymentId: payment.id,
@@ -104,8 +104,9 @@ async function handlePaymentCreated(payload: AsaasWebhookPayload) {
     pixCopyCode: payment.pixCopyCode ?? null,
     paymentUrl: payment.paymentUrl ?? null,
   }]).returning().all();
-
-  console.log(`[Asaas Webhook] Payment ${payment.id} criado (id: ${newPayment.id})`);
+    if (paymentRows.length === 0 || !paymentRows[0]) throw new Error("Falha ao criar pagamento");
+    const np = paymentRows[0];
+    console.log(`[Asaas Webhook] Payment ${payment.id} criado (id: ${np.id})`);
 
   // Schedule follow-ups
   const dueDate = new Date(payment.dueDate);
@@ -114,7 +115,7 @@ async function handlePaymentCreated(payload: AsaasWebhookPayload) {
     const sf = new Date(dueDate);
     sf.setDate(sf.getDate() + days);
     schedules.push({
-      paymentId: newPayment.id,
+      paymentId: np.id,
       userId: DEMO_USER_ID,
       customerId,
       step,
@@ -124,7 +125,7 @@ async function handlePaymentCreated(payload: AsaasWebhookPayload) {
   }
   db.insert("pixflow_follow_up_schedules").values(schedules).returning();
 
-  console.log(`[Asaas Webhook] 3 lembretes agendados para payment ${newPayment.id}`);
+  console.log(`[Asaas Webhook] 3 lembretes agendados para payment ${np.id}`);
 }
 
 async function handlePaymentConfirmed(payload: AsaasWebhookPayload) {

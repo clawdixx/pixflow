@@ -6,6 +6,8 @@
  * sem fazer requisições reais à API do Asaas.
  */
 
+import crypto from "crypto";
+
 // ─── Types ───────────────────────────────────────────────────────────────────
 
 export interface AsaasCustomer {
@@ -165,7 +167,6 @@ export function validateWebhookSignature(
 ): boolean {
   if (IS_MOCK) return true;
   // Asaas uses HMAC-SHA256
-  const crypto = require("crypto");
   const expected = crypto
     .createHmac("sha256", process.env.ASAAS_WEBHOOK_TOKEN!)
     .update(payload)
