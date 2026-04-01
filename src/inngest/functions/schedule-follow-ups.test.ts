@@ -1,5 +1,5 @@
-import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
-import { mockDb, createMockStepRun, MockPayment, MockCustomer, MockFollowUpSchedule } from "../../lib/test-utils";
+import { describe, it, expect, vi, beforeEach } from "vitest";
+import { mockDb, MockFollowUpSchedule } from "../../lib/test-utils";
 
 // Mock modules before importing
 vi.mock("@/lib/db", () => ({
@@ -41,11 +41,8 @@ vi.mock("@/lib/messages", () => ({
 }));
 
 describe("Schedule Follow-ups - Agendamento de lembretes", () => {
-  let mockStepRun: ReturnType<typeof createMockStepRun>;
-
   beforeEach(() => {
     mockDb.reset();
-    mockStepRun = createMockStepRun();
     vi.clearAllMocks();
   });
 
@@ -338,7 +335,7 @@ describe("Schedule Follow-ups - Agendamento de lembretes", () => {
         updatedAt: now.toISOString(),
       });
 
-      const schedule1 = mockDb.addSchedule({
+      mockDb.addSchedule({
         paymentId: payment.id,
         userId: "demo-user",
         customerId: customer.id,
@@ -348,7 +345,7 @@ describe("Schedule Follow-ups - Agendamento de lembretes", () => {
         status: "PENDING",
       });
 
-      const schedule2 = mockDb.addSchedule({
+      mockDb.addSchedule({
         paymentId: payment.id,
         userId: "demo-user",
         customerId: customer.id,

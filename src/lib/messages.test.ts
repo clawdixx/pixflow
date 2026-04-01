@@ -1,4 +1,4 @@
-import { describe, it, expect, vi, beforeEach } from "vitest";
+import { describe, it, expect } from "vitest";
 import { d3Message, d7Message, d14Message, paymentConfirmedMessage } from "./messages";
 
 describe("Templates de mensagens de follow-up", () => {

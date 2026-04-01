@@ -1,7 +1,6 @@
 /**
  * Test utilities and mocks for Pixflow tests
  */
-import { vi } from "vitest";
 
 // ─── Mock Database ───────────────────────────────────────────────────────────
 
